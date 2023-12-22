@@ -41,7 +41,7 @@ daftar db 13,10,'|-----------------------------------------------------------|'
        db 13,10,'+----+---------------+------------------+-------------------|'
        db 13,10,'| 08 |  Bayar merah  |    Rp. 2.500     |    Rp. 5.000      |'
        db 13,10,'+----+---------------+------------------+-------------------|'
-       db 13,10,'| 09 |    Brokoli    |    Rp. 10.000    |    Rp. 20.000    |'
+       db 13,10,'| 09 |    Brokoli    |    Rp. 10.000    |    Rp. 20.000     |'
        db 13,10,'+----+---------------+------------------+-------------------|'
        db 13,10,'| 10 |     Kubis     |    Rp. 12.000    |    Rp. 24.000     |'
        db 13,10,'+----+---------------+------------------+-------------------|','$'
@@ -169,61 +169,51 @@ hasil1:
       lea dx,teks1
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h
 hasil2:
       mov ah,09h
       lea dx,teks2
       int 21h     
       jmp main_loop ; Ulangi loop
-      int 20h
 hasil3:
       mov ah,09h
       lea dx,teks3
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h        
 hasil4:
       mov ah,09h
       lea dx,teks4
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h       
 hasil5:
       mov ah,09h
       lea dx,teks5
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil6:
       mov ah,09h
       lea dx,teks6
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h      
 hasil7:
       mov ah,09h
       lea dx,teks7 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil8:
       mov ah,09h
       lea dx,teks8 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h      
 hasil9:
       mov ah,09h
       lea dx,teks9 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil10:
       mov ah,09h
       lea dx,teks10  
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h
       
 ;---------------------------------------------'
 
@@ -326,61 +316,51 @@ hasil11:
       lea dx,teks11
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h
 hasil12:
       mov ah,09h
       lea dx,teks12
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h
 hasil13:
       mov ah,09h
       lea dx,teks13
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h        
 hasil14:
       mov ah,09h
       lea dx,teks14
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h       
 hasil15:
       mov ah,09h
       lea dx,teks15
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil16:
       mov ah,09h
       lea dx,teks16
       int 21h
       jmp main_loop ; Ulangi loop    
-      int 20h      
 hasil17:
       mov ah,09h
       lea dx,teks17 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil18:
       mov ah,09h
       lea dx,teks18 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h      
 hasil19:
       mov ah,09h
       lea dx,teks19 
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h     
 hasil20:
       mov ah,09h
       lea dx,teks20  
       int 21h
       jmp main_loop ; Ulangi loop
-      int 20h
     
 ;---------------------------------------------'
 
