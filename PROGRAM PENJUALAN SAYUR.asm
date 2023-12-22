@@ -89,7 +89,7 @@ ikat1:
     mov ah, 0ah
     lea dx, tampung_ikat
     int 21h
-    cmp byte ptr [tampung_ikat+2], '1' ; Membandingkan karakter pertama dari input
+    cmp byte ptr [tampung_ikat+2], '1' ; 
     je  proses_1
     cmp byte ptr [tampung_ikat+2], '2'
     je  proses_2
@@ -103,7 +103,7 @@ main_loop:
     mov ah, 0ah
     lea dx, tampung_ulang
     int 21h
-    cmp byte ptr [tampung_ulang+2], 'Y' ; Membandingkan karakter pertama dari input
+    cmp byte ptr [tampung_ulang+2], 'Y'
     je  ikat1
     cmp byte ptr [tampung_ulang+2], 'T'
     je  exit_program
@@ -168,52 +168,52 @@ hasil1:
       mov ah,09h
       lea dx,teks1
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil2:
       mov ah,09h
       lea dx,teks2
       int 21h     
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil3:
       mov ah,09h
       lea dx,teks3
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil4:
       mov ah,09h
       lea dx,teks4
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil5:
       mov ah,09h
       lea dx,teks5
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop
 hasil6:
       mov ah,09h
       lea dx,teks6
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil7:
       mov ah,09h
       lea dx,teks7 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil8:
       mov ah,09h
       lea dx,teks8 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil9:
       mov ah,09h
       lea dx,teks9 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop
 hasil10:
       mov ah,09h
       lea dx,teks10  
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
       
 ;---------------------------------------------'
 
@@ -315,52 +315,52 @@ hasil11:
       mov ah,09h
       lea dx,teks11
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil12:
       mov ah,09h
       lea dx,teks12
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil13:
       mov ah,09h
       lea dx,teks13
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil14:
       mov ah,09h
       lea dx,teks14
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil15:
       mov ah,09h
       lea dx,teks15
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil16:
       mov ah,09h
       lea dx,teks16
       int 21h
-      jmp main_loop ; Ulangi loop    
+      jmp main_loop    
 hasil17:
       mov ah,09h
       lea dx,teks17 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop
 hasil18:
       mov ah,09h
       lea dx,teks18 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
 hasil19:
       mov ah,09h
       lea dx,teks19 
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop
 hasil20:
       mov ah,09h
       lea dx,teks20  
       int 21h
-      jmp main_loop ; Ulangi loop
+      jmp main_loop 
     
 ;---------------------------------------------'
 
