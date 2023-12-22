@@ -1,0 +1,450 @@
+.model small
+.code
+org 100h
+					;program di atas untuk mendefinisikan model memori , bagian kode .
+					dengan menetapkan titik di awal program  untuk dimulai pada alamat 100h
+
+start:					;start adalah tanda awal eksekusi program
+      jmp mulai				;program ini untuk melompat ke label mulai
+nama db 13,10,'Nama Pembeli : $'	;ini merupakan sebuah string yang berisi pesan "nama pembeli" yang nantinya 					akan di gunakan untuk emnampilkan prompt kepada pengguna
+tampung_nama    db 30,?,30 dup(?)	;tampung_nama meruapakan sebuah buffer / ruang penyimpan semntara yang di 					definisikan dengan panjang 30 byte ('db 30') buffer ini digunakan untuk 					menyimpan nama pembeli yang dimasukan.
+					untuk bagian ?,30 dup(?) ini menunjukan bahwa buffer ini bisa di 						isi oleh pengguna dengan panjang nama sampai 30 krakter
+
+
+					;variabel a sampai j di definisikan untuk menyimpan nilai numerik
+a db 01	
+b db 02
+c db 03
+d db 04
+e db 05					;a-i didefinisikan sebagai byte,yang hanya menyimpan satu byte /8bit
+f db 06
+g db 07
+h db 08
+i db 09
+j dw 15					;dw didefinisikan sebagai double word yang mana menunjukan bahwa variabel 					ini menyimpan 2 byte atau 16 bit
+
+			;di bawah adalah daftar sayuran sayuran yang tersedia 
+daftar db 13,10,'|-----------------------------------------------------------|'
+       db 13,10,'|                         TOKO SAYUR                        |'
+       db 13,10,'|-----------------------------------------------------------|' 
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| No |  Jenis Sayur  |  Harga Per-Ikat  |  Harga Per 2 Ikat |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 01 |   Kangkung    |    Rp. 3.000     |    Rp. 6.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 02 |  Bayam Hijau  |    Rp. 2.500     |    Rp. 5.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 03 |  Sawi Pahit   |    Rp. 4.000     |    Rp. 8.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 04 |Kacang Panjang |    Rp. 8.000     |    Rp. 16.000     |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 05 |     Katu      |    Rp. 5.000     |    Rp. 10.000     |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 06 |  Sawi Manis   |    Rp. 4.000     |    Rp. 8.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 07 |     Pakcoy    |    Rp. 3.500     |    Rp. 7.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 08 |  Bayar merah  |    Rp. 2.500     |    Rp. 5.000      |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 09 |    Brokoli    |    Rp. 10.000    |    Rp. 20.000     |'
+       db 13,10,'+----+---------------+------------------+-------------------|'
+       db 13,10,'| 10 |     Kubis     |    Rp. 12.000    |    Rp. 24.000     |'
+       db 13,10,'+----+---------------+------------------+-------------------|','$'		;karakter $ 									digunakan untuk menandakan akhir tampilan daftar
+(Setiap baris dalam daftar direpresentasikan oleh string diikuti oleh karakter pemindah baris (13,10). Nomor, jenis sayur, harga per-ikat, dan harga per 2 ikat diatur dengan rapi dalam kolom sesuai dengan header.)
+
+error           db 13,10,'KODE YANG ANDA MASUKAN SALAH $ '	;mendefinisikan pesan kesalahan yang akan di 									tampilkan jika pengguna memasukan kode yang tidak 								tersedia
+pilih_ntr       db 13,10,'Silahkan Memilih Nomor Sayuran : $'			;ini adalah pesan yang akan di 											tampilakan kepada pengguna untuk 										meminta memilih nomor sayuran yang 										ingin di beli
+ikat            db 13,10,'Berapa Ikat : $'					;beberapa program ini sama dengan 										ppenjelasan yang di atas tetapi 										dengan tujuan yang berbeda beda.
+ulang           db 13,10,'Apakah Masih ada Sayuran yang Ingin Anda Beli : (Y/T)$'
+tampung_ulang   db 13,?,13 dup(?)						
+tampung_ikat    db 13,?,13 dup(?)
+selesai         db 13,10,'Terimakasih Sudah Berbelanja di Toko Sayur Kami $'	;ini adalah pesan penutup yang akan 										di tampilkan apabil apengguna 	
+										selesai berbelanja
+
+error_nsg:        		;ini adalah bagian dari program yang menangani kesalahan jia pengguna memasukan 				inputan yang tidak vaid.jika kesalahan terjadi ,pesan kesalahan akan di tampilkan 				dan program akan keluar;							
+     mov ah,09h
+     mov dx,offset error
+     int 21h
+     int 20h			;int 20 untuk mengakhiri eksekusi
+
+(Jadi, jika ada kesalahan input dari pengguna, program akan menampilkan pesan kesalahan dan kemudian keluar dari eksekusi menggunakan layanan sistem DOS dengan fungsi int 20h.)
+
+mulai:
+    mov ah,09h		;fungsi ini untuk mnmpilkan stringke layar menggunakan layanan sistem DOS dengan fungsi 09h
+    lea dx,nama		;digunakan untuk memuat alamat string ke dalam register dx.
+    int 21h		;untuk mencetak program 
+    mov ah,0ah		;Instruksi ini menggunakan fungsi 0ah untuk membaca string dari input pengguna ke dalam 			buffer tampung_nama
+    lea dx,tampung_nama		;program untuk menampung nama pembeli
+    int 21h
+    push dx		;Menyimpan alamat buffer tampung_nama agar 
+
+    mov ah,09h			
+    mov dx,offset daftar	;Memuat alamat string daftar sayuran ke dalam register dx
+    int 21h			
+    mov ah,09h
+    jmp ikat1			;Melompat ke label ikat1
+
+(Pada inti program ini, setelah menampilkan prompt untuk nama pembeli dan daftar sayuran, program melompat ke bagian "ikat1" untuk memulai pemilihan dan pembelian sayuran.)
+    
+exit_program:		; menampilkan pesan selesai dan keluar dari loop yang terjadi
+    mov ah,09h
+    lea dx,selesai	;Memuat alamat string "Terimakasih Sudah Berbelanja di Toko Sayur Kami $" ke dalam register 			dx
+    int 21h		;cetak program
+    int 20h		;keluar dari program
+
+(Dengan instruksi ini, setelah menampilkan pesan terimakasih, program akan keluar dan menyelesaikan eksekusinya. Ini berfungsi sebagai langkah terakhir dari program setelah pengguna selesai berbelanja dan memilih untuk keluar dari program.)
+                   
+ikat1:			;program ini masuk ke dalam program looping
+    mov ah, 09h
+    lea dx, ikat	;Memuat alamat string "Berapa Ikat : $" ke dalam register dx
+    int 21h		;mencetak program
+
+    mov ah, 0ah			;Fungsi untuk membaca string dari input
+    lea dx, tampung_ikat	;Memuat alamat buffer tampung_ikat ke dalam register dx
+    int 21h			;Membaca string dari input
+    cmp byte ptr [tampung_ikat+2], '1' ; Membandingkan karakter pertama dari input
+    je  proses_1			;Jika karakter pertama adalah '1', melompat ke label proses_1
+    cmp byte ptr [tampung_ikat+2], '2'
+    je  proses_2			; Jika karakter pertama adalah '2', melompat ke label proses_2
+    jne error_nsg			;Jika karakter pertama bukan '1' atau '2', melompat ke label error_nsg
+
+(program ini akan meminta pengguna untuk memasukkan jumlah ikat sayuran yang ingin dibeli, membaca input tersebut, dan memeriksa apakah jumlah ikat tersebut adalah '1' atau '2'. Jika iya, program akan melanjutkan ke proses selanjutnya (entah itu proses_1 atau proses_2). Jika tidak, program akan melompat ke label error_nsg untuk menangani kesalahan input.)
+
+main_loop:     		;program ini masuk ke program perulangan ketika pelanggan telah memilih sayuran yang dingnk
+    mov ah,09h
+    lea dx,ulang	;Memuat alamat string "Apakah Masih ada Sayuran yang Ingin Anda Beli : (Y/T)$" ke dalam 			register dx
+    int 21h
+        
+    mov ah, 0ah
+    lea dx, tampung_ulang	;Memuat alamat buffer tampung_ulang ke dalam register dx
+    int 21h
+    cmp byte ptr [tampung_ulang+2], 'Y' ; Membandingkan karakter pertama dari input
+    je  ikat1			;Jika karakter pertama adalah 'Y', melompat ke label ikat1 untuk memilih sayuran 				lagi
+    cmp byte ptr [tampung_ulang+2], 'T'
+    je  exit_program		;Jika karakter pertama adalah 'T', melompat ke label exit_program untuk keluar dari 				program dan program selesai
+    jne error_nsg		;Jika karakter pertama bukan 'Y' atau 'T', melompat ke label error_nsg untuk 					menangani kesalahan
+
+(bagian ini bertanggung jawab untuk menampilkan pesan kepada pengguna, membaca jawaban pengguna, dan memeriksa apakah jawaban tersebut adalah 'Y' atau 'T'. Program akan melanjutkan ke label ikat1 jika jawaban adalah 'Y', keluar dari program jika jawaban adalah 'T', dan menangani kesalahan jika jawaban tidak valid. Program akan terus melakukan loop ini sampai pengguna memilih untuk keluar (memasukkan 'T').)
+                 
+proses_1:
+      mov ah,09h
+      mov dx,offset pilih_ntr	; Memuat alamat string "Silahkan Memilih Nomor Sayuran : $" ke dalam register dx
+				intruksi ini mnmpilkn pesn kepda pnggna untuk mmlh nmr syurn
+      int 21h
+      
+      mov ah,1		;Fungsi untuk membaca karakter dari input
+      int 21h		;Membaca karakter pertama dari input (nomor sayuran)
+      mov bh,al		;Menyimpan karakter pertama di dalam register bh
+      mov ah,1		;Fungsi untuk membaca karakter dari input
+      int 21h		;Membaca karakter kedua dari input (nomor sayuran)
+      mov bl,al		;menyimpan karakter kedua di dalam register bl
+			;intruksi ini membaca 2 karakter yang di input program,yang merupakan nomor syurn yg dipilh
+      cmp bh,'0'
+      cmp bl,'1'
+      je hasil1		;Jika nomor sayuran adalah '01', melompat ke label hasil1
+
+(bagian ini bertanggung jawab untuk menampilkan pesan kepada pengguna, membaca dua karakter dari input (nomor sayuran), dan memeriksa apakah nomor sayuran yang dipilih adalah '01'. Jika ya, program akan melanjutkan ke label hasil1.)
+      
+      cmp bh,'0'
+      cmp bl,'2'
+      je hasil2
+      
+      cmp bh,'0'
+      cmp bl,'3'
+      je hasil3
+      
+      cmp bh,'0'
+      cmp bl,'4'
+      je hasil4
+      
+      cmp bh,'0'
+      cmp bl,'5'
+      je hasil5
+      
+      cmp bh,'0'
+      cmp bl,'6'
+      je hasil6
+      
+      cmp bh,'0'
+      cmp bl,'7'
+      je hasil7
+      
+      cmp bh,'0'
+      cmp bl,'8'
+      je hasil8
+      
+      cmp bh,'0'
+      cmp bl,'9'
+      je hasil9
+           
+      cmp bh,'1'
+      cmp bl,'0'
+      je hasil10
+      
+      
+      jne error_nsg	;Jika nomor sayuran tidak sesuai dengan pilihan yang ada, melompat ke label error_nsg
+;---------------------------------------------------'
+
+hasil1:			;untuk menangani inputan pengguna dan menampilkan pesan yang sesuai tentang pilihan sayuran
+      mov ah,09h	;Fungsi untuk menampilkan string
+      lea dx,teks1	;Memuat alamat string teks1 ke dalam register dx
+      int 21h		;Menampilkan string menggunakan layanan sistem DOS
+      jmp main_loop ; Ulangi loop	;Melompat ke label main_loop untuk mengulangi loop utama Instruksi ini 						mengarahkan program kembali ke loop utama, sehingga pengguna dapat terus 					memilih dan membeli sayuran.
+(Bagian ini memberikan struktur untuk menangani aksi yang terkait dengan pemilihan sayuranSetelah menampilkan pesan terkait, program akan kembali ke loop utama sehingga pengguna dapat memilih lagi atau keluar dari program)
+      int 20h
+hasil2:
+      mov ah,09h
+      lea dx,teks2
+      int 21h     
+      jmp main_loop ; Ulangi loop
+      int 20h
+hasil3:
+      mov ah,09h
+      lea dx,teks3
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h        
+hasil4:
+      mov ah,09h
+      lea dx,teks4
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h       
+hasil5:
+      mov ah,09h
+      lea dx,teks5
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil6:
+      mov ah,09h
+      lea dx,teks6
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h      
+hasil7:
+      mov ah,09h
+      lea dx,teks7 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil8:
+      mov ah,09h
+      lea dx,teks8 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h      
+hasil9:
+      mov ah,09h
+      lea dx,teks9 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil10:
+      mov ah,09h
+      lea dx,teks10  
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h
+      
+;---------------------------------------------'
+
+teks1 db 13,10,'Anda memilih Sayur Kangkung'		;ini merupakan tmpilan string.berisi informasi pada setiap 							sayuran untuk di tampilkan
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 3.000' 	;String ini memberikan 												informasi kepada pengguna 											tentang harga yang harus 											dibayar jika mereka membeli 											1 ikat Kangkung.
+      db 13,10,'$'      ;'$'digunakan sebgai penanda akhir string
+(Jadi, bagian ini menyusun string yang memberikan informasi tentang pilihan sayuran Kangkung, beserta harga yang harus dibayar jika pengguna membeli 1 ikat sayuran tersebut. String ini kemudian digunakan untuk menampilkan pesan kepada pengguna setelah mereka memilih sayuran nomor 01.)
+       
+teks2 db 13,10,'Anda memilih Sayur Bayam Hijau'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 2.500'
+      db 13,10,'$'
+           
+teks3 db 13,10,'Anda memilih Sayur Sawi Pahit'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 4.000'
+      db 13,10,'$'
+            
+teks4 db 13,10,'Anda memilih Kacang Panjang'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 8.000'
+      db 13,10,'$' 
+           
+teks5 db 13,10,'Anda memilih Katu'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 5.000'
+      db 13,10,'$' 
+           
+teks6 db 13,10,'Anda memilih Sayur Sawi Manis'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 4.000'
+      db 13,10,'$'
+            
+teks7 db 13,10,'Anda memilih Sayur Pakcoy'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 3.500'
+      db 13,10,'$'      
+teks8 db 13,10,'Anda memilih Sayur Bayam Merah'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 2.500'
+      db 13,10,'$'  
+          
+teks9 db 13,10,'Anda memilih Sayur Brokoli'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 10.000'
+      db 13,10,'$' 
+           
+teks10 db 13,10,'Anda memilih Sayur Kubis'
+      db 13,10,'Jika anda membeli 1 Ikat maka total yang harus anda bayar Rp. 12.000'
+      db 13,10,'$'  
+      
+proses_2:
+      mov ah,09h
+      mov dx,offset pilih_ntr
+      int 21h
+      
+      mov ah,1
+      int 21h
+      mov bh,al
+      mov ah,1
+      int 21h
+      mov bl,al
+      cmp bh,'0'
+      cmp bl,'1'
+      je hasil11
+      
+      cmp bh,'0'
+      cmp bl,'2'
+      je hasil12
+      
+      cmp bh,'0'
+      cmp bl,'3'
+      je hasil13
+      
+      cmp bh,'0'
+      cmp bl,'4'
+      je hasil14
+      
+      cmp bh,'0'
+      cmp bl,'5'
+      je hasil15
+      
+      cmp bh,'0'
+      cmp bl,'6'
+      je hasil16
+      
+      cmp bh,'0'
+      cmp bl,'7'
+      je hasil17
+      
+      cmp bh,'0'
+      cmp bl,'8'
+      je hasil18
+      
+      cmp bh,'0'
+      cmp bl,'9'
+      je hasil19
+           
+      cmp bh,'1'
+      cmp bl,'0'
+      je hasil20  
+      
+      
+      jne error_nsg
+ ;---------------------------------------------------'
+
+hasil11:		
+      mov ah,09h
+      lea dx,teks11
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h
+hasil12:
+      mov ah,09h
+      lea dx,teks12
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h
+hasil13:
+      mov ah,09h
+      lea dx,teks13
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h        
+hasil14:
+      mov ah,09h
+      lea dx,teks14
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h       
+hasil15:
+      mov ah,09h
+      lea dx,teks15
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil16:
+      mov ah,09h
+      lea dx,teks16
+      int 21h
+      jmp main_loop ; Ulangi loop    
+      int 20h      
+hasil17:
+      mov ah,09h
+      lea dx,teks17 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil18:
+      mov ah,09h
+      lea dx,teks18 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h      
+hasil19:
+      mov ah,09h
+      lea dx,teks19 
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h     
+hasil20:
+      mov ah,09h
+      lea dx,teks20  
+      int 21h
+      jmp main_loop ; Ulangi loop
+      int 20h
+    
+;---------------------------------------------'
+
+teks11 db 13,10,'Anda memilih Sayur Kangkung'		
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 6.000'
+       db 13,10,'$'
+             
+teks12 db 13,10,'Anda memilih Sayur Bayam Hijau'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 5.000'
+       db 13,10,'$'
+           
+teks13 db 13,10,'Anda memilih Sayur Sawi Pahit'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 8.000'
+       db 13,10,'$' 
+           
+teks14 db 13,10,'Anda memilih Kacang Panjang'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 16.000'
+       db 13,10,'$' 
+           
+teks15 db 13,10,'Anda memilih Katu'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 10.000'
+       db 13,10,'$' 
+           
+teks16 db 13,10,'Anda memilih Sayur Sawi Manis'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 8.000'
+       db 13,10,'$' 
+            
+teks17 db 13,10,'Anda memilih Sayur Pakcoy'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 7.000'
+       db 13,10,'$' 
+           
+teks18 db 13,10,'Anda memilih Sayur Bayam Merah'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 5.000'
+       db 13,10,'$'
+            
+teks19 db 13,10,'Anda memilih Sayur Brokoli'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 20.000'
+       db 13,10,'$'
+            
+teks20 db 13,10,'Anda memilih Sayur Kubis'
+       db 13,10,'Jika anda membeli 2 ikat maka total yang harus anda bayar Rp. 24.000'
+       db 13,10,'$'       
+                  
+end start       ;menandai akhir program
