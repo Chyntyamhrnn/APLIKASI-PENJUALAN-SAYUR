@@ -51,6 +51,8 @@ pilih_ntr       db 13,10,'Silahkan Memilih Nomor Sayuran : $'
 ikat            db 13,10,'Berapa Ikat : $'
 selesai         db 13,10,'Terimakasih Sudah Berbelanja di Toko Sayur Kami $'
 ulang           db 13,10,'Apakah Masih ada Sayuran yang Ingin Anda Beli : (Y/T)$'
+awal            db 13,10,'Selamat Datang di Toko Sayur Kami $'
+enter           db 13,10,'$'
 tampung_ulang   db 13,?,13 dup(?)
 tampung_ikat    db 13,?,13 dup(?)
 
@@ -61,6 +63,15 @@ error_nsg:
      int 20h
 
 mulai:
+    
+    mov ah,09h
+    lea dx,awal
+    int 21h
+    mov ah,09h
+    lea dx,enter
+    int 21h
+    
+    
     mov ah,09h
     lea dx,nama
     int 21h
@@ -76,6 +87,10 @@ mulai:
     jmp ikat1
     
 exit_program:
+    mov ah,09h
+    lea dx,enter
+    int 21h
+    
     mov ah,09h
     lea dx,selesai
     int 21h
@@ -110,6 +125,11 @@ main_loop:
     jne error_nsg
                  
 proses_1:
+      
+      mov ah,09h
+      lea dx,enter
+      int 21h
+    
       mov ah,09h
       mov dx,offset pilih_ntr
       int 21h
@@ -257,6 +277,10 @@ teks10 db 13,10,'Anda memilih Sayur Kubis'
       db 13,10,'$'  
       
 proses_2:
+      mov ah,09h
+      lea dx,enter
+      int 21h    
+     
       mov ah,09h
       mov dx,offset pilih_ntr
       int 21h
